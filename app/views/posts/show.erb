@@ -1,0 +1,7 @@
+<h2><%= @post.title %></h2><a href="/posts/<%= @post.id %>/edit">Edit this post</a>
+<p>Tags:
+  <% @tags.each do |tag| %>
+  <a href='/tags/<%= tag.id %>'><%= tag.text %></a>
+  <% end %>
+</p>
+<p><%= @post.body %></p>

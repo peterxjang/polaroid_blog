@@ -1,0 +1,16 @@
+<h1>New Post</h1>
+<form action="/posts" method="POST">
+  <p class='error-message'><%= @message %></p>
+  <ul class='list-no-bullets'>
+  <li><label>Title: </label></li>
+  <li><input type="text" name="title" placeholder="Title" value='<%= @post.title %>'/></li>
+  <li><label>Tags: </label></li>
+  <li><input type="text" name="tags" placeholder="Tags" value='
+  <% @tags.each do |tag| %>
+  <%= tag.text + ', ' %>
+  <% end %>
+  '/></li>
+  <li><label>Body: </label><textarea name="body" rows="30" cols="28"><%= @post.body %></textarea></li>
+  <li><input type="submit" value="Submit"/></li>
+  </ul>
+</form>

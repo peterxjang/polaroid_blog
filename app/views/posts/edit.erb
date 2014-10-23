@@ -1,0 +1,17 @@
+<h1>Edit Post</h1>
+<form action="/posts/<%= @post.id %>" method="POST">
+<input type="hidden" name="_method" value="PUT"/>
+  <p class='error-message'><%= @message %></p>
+  <ul class='list-no-bullets'>
+  <li><label>Title: </label></li>
+  <li><input type="text" name="post[title]" placeholder="Title" value='<%= @post.title %>'/></li>
+  <li><label>Tags: </label></li>
+  <li><input type="text" name="tags" placeholder="Tags" value='
+  <% @tags.each do |tag| %>
+  <%= tag.text + ', ' %>
+  <% end %>
+  '/></li>
+  <li><label>Body: </label><textarea name="post[body]" rows="30" cols="28"><%= @post.body %></textarea></li>
+  <li><input type="submit" value="Submit"/></li>
+  </ul>
+</form>
