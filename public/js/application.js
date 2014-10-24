@@ -27,24 +27,48 @@ $(document).ready(function() {
   // resizeCanvas();
 
 
-
+  $("#link-polaroids").on("click", function(event){
+      event.preventDefault();
   $.ajax({
     url: '/posts_polariod',
     type: "GET",
+    dataType: 'json',
     success: function(response) {
-      console.log(response);
-      $('img').each(function(index){
-        console.log($(this))
-        var group = polaroid($(this).attr('id'), $(this).attr('id'), 150, 100, -10, function() {
-          console.log('selected object:' + index);
+      // $('main').html("");
+      $('#posts-container').html("");
+      $('#posts-container').append("<button id='save-layout'>Save layout</button>");
+      $('#posts-container').append("<canvas id='canvas'></canvas>");
+      var canvas = new fabric.Canvas('canvas', {
+        backgroundColor: '#333',
+        HOVER_CURSOR: 'pointer',
+      });
+      canvas.setWidth(window.innerWidth*0.8);
+      canvas.setHeight(window.innerHeight*0.8);
+      makeCanvasZoomable(canvas);
+      for (var i=0; i< response.posts.length; i++){
+        var post = response.posts[i];
+        $('#posts-container').append('<img id="' + post.id + '" class="polaroid" src="' + post.url + '" />')
+        var group = polaroid(post.id, post.title, 150, 100, -10, function() {
+          // console.log('selected object:' + index);
           canvas.bringToFront(canvas.getActiveObject());
         });
         canvas.add(group);
-      })
+      }
+      console.log($('main'));
+      // $('img').each(function(index){
+      //   console.log($(this))
+      //   var group = polaroid($(this).attr('id'), $(this).attr('id'), 150, 100, -10, function() {
+      //     console.log('selected object:' + index);
+      //     canvas.bringToFront(canvas.getActiveObject());
+      //   });
+      //   canvas.add(group);
+      // })
     },
     error: function(response) {
+      console.log('bi');
       console.log(response);
     }
+  });
   });
   $('#save-layout').on('click', function(e){
 

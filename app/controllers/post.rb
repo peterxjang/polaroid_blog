@@ -13,9 +13,23 @@ get '/posts_polariod' do
   @user = User.find_by_id(session[:user_id])
   redirect '/' if !@user
   @posts = @user.posts
-  puts @posts.first.image.url
+  # puts @posts.first.image.url
   # @posts = []
-  erb :'posts/posts_polariod'
+  # erb :'posts/posts_polariod'
+  # content_type :json
+  # {points: post.points}.to_json
+
+
+  json_hash = {posts: []}
+  @posts.each do |post|
+    json_hash[:posts] << {
+      title: post.title,
+      id: post.id,
+      url: post.image.url
+    }
+  end
+  content_type :json
+  json_hash.to_json
 end
 
 
