@@ -9,6 +9,14 @@ get '/posts' do
   erb :'posts/index'
 end
 
+get '/posts_polariod' do
+  @user = User.find_by_id(session[:user_id])
+  redirect '/' if !@user
+  @posts = @user.posts
+  erb :'posts/posts_polariod'
+end
+
+
 get '/posts/new' do
   # @user = User.find_by_id(session[:user_id])
   # @post = @user.posts.find_by_id(params[:post_id])
