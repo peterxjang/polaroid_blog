@@ -13,7 +13,8 @@ get '/posts_polariod' do
   @user = User.find_by_id(session[:user_id])
   redirect '/' if !@user
   @posts = @user.posts
-  @posts = []
+  puts @posts.first.image.url
+  # @posts = []
   erb :'posts/posts_polariod'
 end
 
@@ -43,7 +44,10 @@ end
 
 post '/posts' do
   @user = User.find_by_id(session[:user_id])
-  @post = @user.posts.create(title: params[:title], body: params[:body])
+  @post = @user.posts.new(title: params[:title], body: params[:body])
+  @post.image = params[:filename]
+  @post.save
+  redirect '/posts'
 end
 
 put '/posts/:post_id' do

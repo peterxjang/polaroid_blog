@@ -19,8 +19,11 @@ function polaroid(id, caption, left, top, angle, onClick) {
       top: 100 + imgInstance.height + imgInstance.H_PADDING * 2,
       fontSize:30,
       originY: 'center',
-      originX: 'center'
+      originX: 'center',
+      scaleX: imgInstance.height / 350,
+      scaleY: imgInstance.height / 350
     });
+    // text.scaleToHeight(imgInstance.H_PADDING);
     var group = new fabric.Group([rectangle, imgInstance, text], {
       left: left,
       top: top,

@@ -1,6 +1,6 @@
 get '/' do
-  # erb :'sessions/new'
-  erb :'posts/posts_polariod'
+  erb :'sessions/new'
+  # erb :'posts/posts_polariod'
 end
 
 post '/sessions' do

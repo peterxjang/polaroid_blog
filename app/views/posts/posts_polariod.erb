@@ -1,8 +1,6 @@
-<canvas id="canvas" width="960" height="500" style="border:1px solid #000000;"></canvas>
-
-  <img id="polaroid0" class="polaroid" src="img/4.jpg" />
-  <img id="polaroid1" class="polaroid" src="img/5.jpg" />
+<button id='save-layout'>Save layout</button>
+<canvas id="canvas"></canvas>
 
 <% @posts.each do |post| %>
-  <img id="polaroid-<% post.id %>" class="polaroid" src="<% post.image.url %>" />
+  <img id="polaroid-<%= post.id %>" class="polaroid" src="<%= post.image.url %>" />
 <% end %>
