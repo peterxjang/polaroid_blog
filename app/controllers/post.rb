@@ -13,6 +13,7 @@ get '/posts_polariod' do
   @user = User.find_by_id(session[:user_id])
   redirect '/' if !@user
   @posts = @user.posts
+  @posts = []
   erb :'posts/posts_polariod'
 end
 

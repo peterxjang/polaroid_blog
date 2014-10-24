@@ -7,6 +7,7 @@ class CreateTables < ActiveRecord::Migration
     create_table :posts do |t|
       t.string :title
       t.text :body
+      t.string :image
       t.belongs_to :user
     end
     create_table :tags do |t|

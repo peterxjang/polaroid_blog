@@ -1,4 +1,4 @@
-function polaroid(id, onClick) {
+function polaroid(id, caption, left, top, angle, onClick) {
     var imgElement = document.getElementById(id);
     var imgInstance = new fabric.Image(imgElement, {
       left: 100,
@@ -14,7 +14,7 @@ function polaroid(id, onClick) {
       width: imgInstance.width + 2 * imgInstance.H_PADDING,
       height: imgInstance.height + 2* imgInstance.V_PADDING
     });
-    var text = new fabric.Text('hello world', {
+    var text = new fabric.Text(caption, {
       left: 100 + imgInstance.width / 2,
       top: 100 + imgInstance.height + imgInstance.H_PADDING * 2,
       fontSize:30,
@@ -22,9 +22,9 @@ function polaroid(id, onClick) {
       originX: 'center'
     });
     var group = new fabric.Group([rectangle, imgInstance, text], {
-      left: 150,
-      top: 100,
-      angle: -10
+      left: left,
+      top: top,
+      angle: angle
     });
     group.on('selected', onClick);
     return group;
