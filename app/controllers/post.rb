@@ -20,8 +20,9 @@ get '/posts_polariod' do
   # {points: post.points}.to_json
 
 
-  json_hash = {posts: []}
+  json_hash = {posts: [], state: @user.canvas_state.to_json}
   @posts.each do |post|
+    puts post.image.url
     json_hash[:posts] << {
       title: post.title,
       id: post.id,
@@ -32,6 +33,14 @@ get '/posts_polariod' do
   json_hash.to_json
 end
 
+post '/posts_polariod_state' do
+  @user = User.find_by_id(session[:user_id])
+  @user.canvas_state = params[:state]
+  @user.save!
+  puts params[:state]
+  content_type :json
+  {message: "Success!"}.to_json
+end
 
 get '/posts/new' do
   # @user = User.find_by_id(session[:user_id])

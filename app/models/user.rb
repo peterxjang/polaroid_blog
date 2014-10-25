@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
   has_many :posts
   has_many :tags, through: :posts
-
+  serialize :canvas_state, JSON
   def password
     @password ||= BCrypt::Password.new(password_hash)
   end

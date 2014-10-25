@@ -3,6 +3,7 @@ class CreateTables < ActiveRecord::Migration
     create_table :users do |t|
       t.string :username
       t.string :password_hash
+      t.text :canvas_state
     end
     create_table :posts do |t|
       t.string :title
