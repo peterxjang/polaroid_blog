@@ -1,5 +1,17 @@
 function polaroid(id, caption, left, top, angle, onClick) {
     var imgElement = document.getElementById(id);
+    // $('#'+id)
+    //   .load(function(){
+    //     // $('#result1').text('Image is loaded!');
+    //     // console.log('Image is loaded!');
+    //   })
+    //   .error(function(){
+    //     // $('#result1').text('Image is not loaded!');
+    //     console.log('Image is not loaded!');
+    //   });
+    console.log(imgElement.width);
+
+// function polaroid(imgElement, caption, left, top, angle, onClick) {
     var imgInstance = new fabric.Image(imgElement, {
       left: 100,
       top: 100,

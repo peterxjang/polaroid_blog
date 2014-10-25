@@ -24,13 +24,19 @@
   <script src="/js/polaroid.js"></script>
   <script src="/js/jquery.mousewheel.min.js"></script>
   <script src="/js/canvas.zoom.js"></script>
+  <script src="/js/PxLoader.js"></script>
+  <script src="/js/PxLoaderImage.js"></script>
 
   <title></title>
 </head>
 <body>
   <main>
-    <%= show_signinout %>
-    <%= yield %>
+    <div id="canvasWrapper">
+      <canvas id="canvas"></canvas>
+    </div>
+    <div id='div-top'>
+      <%= yield %>
+    </div>
   </main>
 </body>
 </html>

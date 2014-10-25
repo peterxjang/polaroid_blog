@@ -4,12 +4,35 @@ $(document).ready(function() {
   // when we try to bind to them
 
   // create a wrapper around native canvas element (with id="canvas")
+  var canvas = new fabric.Canvas('canvas', {HOVER_CURSOR: 'pointer'});
+  canvas.renderOnAddRemove = false;
+  canvas.setWidth(window.innerWidth);
+  canvas.setHeight(window.innerHeight);
+  makeCanvasZoomable(canvas);
+  window.addEventListener('resize', resizeCanvas, false);
+  function resizeCanvas() {
+    canvas.setWidth(window.innerWidth);
+    canvas.setHeight(window.innerHeight);
+    canvas.renderAll();
+  }
+  //         canvasWrapper.width = window.innerWidth;
+  //         canvasWrapper.height = window.innerHeight;
+  //         drawStuff();
+  // }
+  // resizeCanvas();
+  // function drawStuff() {
+  //         do your drawing stuff here
+  //         canvas.renderAll();
+  // }
+
+
+  // create a wrapper around native canvas element (with id="canvas")
   // canvas = new fabric.Canvas('canvas', {
-  //   backgroundColor: '#333',
+  //   // backgroundColor: '#333',
   //   HOVER_CURSOR: 'pointer',
   // });
-  // canvas.setWidth(window.innerWidth*0.8);
-  // canvas.setHeight(window.innerHeight*0.8);
+  // // canvas.setWidth(window.innerWidth*0.8);
+  // // canvas.setHeight(window.innerHeight*0.8);
   // makeCanvasZoomable(canvas);
   // $("#canvas").fabric = canvas;
   // document.getElementById("canvas").fabric = canvas;
@@ -36,50 +59,34 @@ $(document).ready(function() {
       type: "GET",
       dataType: 'json',
       success: function(response) {
-        // $('main').html("");
         $('#posts-container').html("");
         $('#posts-container').append("<button id='save-layout'>Save layout</button>");
         $('#posts-container').append("<canvas id='canvas'></canvas>");
-        // canvas = $("#canvas").fabric;
-        // var canvas = document.getElementById("canvas").fabric;
-        canvas = new fabric.Canvas('canvas', {
-          // backgroundColor: '#333',
-          HOVER_CURSOR: 'pointer',
-          renderOnAddRemove: false
-        });
-        canvas.setWidth(window.innerWidth*0.8);
-        canvas.setHeight(window.innerHeight*0.8);
-        // canvas.renderOnAddRemove = false;
-        makeCanvasZoomable(canvas);
 
-        // console.log(response.state);
-        $("#canvas").fabric = canvas;
+        var loader = new PxLoader();
         for (var i=0; i< response.posts.length; i++){
           var post = response.posts[i];
-          $('#posts-container').append('<img id="' + post.id + '" class="polaroid" src="' + post.url + '" />')
-          var group = polaroid(post.id, post.title, 150, 100, 0, function() {
-            // console.log('selected object:' + index);
-            canvas.bringToFront(canvas.getActiveObject());
-          });
-          group.post_id = post.id;
-          canvas.add(group);
+          $('#posts-container').append('<img id="' + post.id + '" class="polaroid" src="' + post.url + '" />');
+          loader.addImage(post.url);
         }
-        // if (response.state) {
-        if (false) {
-          canvas.loadFromJSON(response.state);
-        }
-        // canvas.loadFromJSON(json,canvas.renderAll.bind(canvas));
-        canvas.renderAll();
+        loader.addCompletionListener(function(){
+          for (var i=0; i< response.posts.length; i++){
+            var post = response.posts[i];
+            var group = polaroid(post.id, post.title, 150+20*i, 100+20*i, 0, function() {
+              canvas.bringToFront(canvas.getActiveObject());
+            });
+            group.post_id = post.id;
+            group.scaleToHeight(300);
+            canvas.add(group);
+          }
+          // if (response.state) {
+          if (false) {
+            canvas.loadFromJSON(response.state);
+          }
+          canvas.renderAll();
+        })
+        loader.start();
 
-
-        // $('img').each(function(index){
-        //   console.log($(this))
-        //   var group = polaroid($(this).attr('id'), $(this).attr('id'), 150, 100, -10, function() {
-        //     console.log('selected object:' + index);
-        //     canvas.bringToFront(canvas.getActiveObject());
-        //   });
-        //   canvas.add(group);
-        // })
       },
       error: function(response) {
         console.log(response);
@@ -89,8 +96,6 @@ $(document).ready(function() {
 
   $('body').on('click', '#save-layout', function(e){
     // canvas = $("#canvas").fabric;
-    // console.log(canvas.toJSON());
-
     var objects = canvas.getObjects();
     for (var i=0; i<objects.length; i++) {
       object = objects[i];
@@ -106,22 +111,8 @@ $(document).ready(function() {
         window.location.href = '/posts';
       }
     })
-    // $('img').each(function(index){
-    //   console.log($(this))
-    //   var group = polaroid($(this).attr('id'), $(this).attr('id'), 150, 100, -10, function() {
-    //     console.log('selected object:' + index);
-    //   });
-    //   canvas.add(group);
-    // })
+
   })
-
-
-  // var group = polaroid('my-img', function() {
-  //   console.log('selected an object!');
-  // });
-  // canvas.add(group);
-
-
 
   // See: http://docs.jquery.com/Tutorials:Introducing_$(document).ready()
 });
