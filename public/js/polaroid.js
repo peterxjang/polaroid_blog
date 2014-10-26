@@ -18,6 +18,7 @@ function polaroid(id, caption, left, top, angle, onClick) {
     left: 100 + imgInstance.width / 2,
     top: 100 + imgInstance.height + imgInstance.H_PADDING * 2,
     fontSize:30,
+    fontFamily:'Permanent Marker',
     originY: 'center',
     originX: 'center',
     scaleX: imgInstance.height / 350,
@@ -62,7 +63,7 @@ function loadPostImages(canvas, canvasData, canvasZoom, objectsData, makeLinks) 
         }
         else {
           postHtml = [
-            '<h2>' + this.post_title + '</h2>',
+            '<h1>' + this.post_title + '</h1>',
             '<img class="img-fullwidth" src=' + this.post_url + '>',
             '<p>' + this.post_body + '</p>'
           ].join('')
