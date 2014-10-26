@@ -1,5 +1,4 @@
 function makeCanvasZoomable(canvas) {
-  zoomScale = 1;
   $("body").on("mousewheel", function (event, delta) {
     var mousePageX = event.pageX;
     var mousePageY = event.pageY;
@@ -33,17 +32,10 @@ function makeCanvasZoomable(canvas) {
     viewportTop = canvas.viewportTransform[5];
     mouseLeft = e.pageX;
     mouseTop = e.pageY;
-    // if (e.altKey) {
-    //   console.log(canvas.getActiveObject());
     if (!canvas.getActiveObject()) {
       _drawSelection = canvas._drawSelection;
       canvas._drawSelection = function(){ };
-      // canvas.selection = false;
-      // canvas.forEachObject(function(o) {
-      //   o.selectable = false;
-      // });
     }
-    // renderVieportBorders();
   });
 
   $('body').mousemove(function(e) {
@@ -54,24 +46,13 @@ function makeCanvasZoomable(canvas) {
           deltaTop = currentMouseTop - mouseTop;
       canvas.viewportTransform[4] = viewportLeft + deltaLeft;
       canvas.viewportTransform[5] = viewportTop + deltaTop;
-      // console.log(deltaLeft, deltaTop);
       canvas.renderAll();
-      // renderVieportBorders();
     }
   });
 
   $('body').mouseup(function(e) {
     canvas._drawSelection = _drawSelection;
     isDown = false;
-    // for (var i = 0, len = canvas._objects.length; i < len; i++) {
-    //   canvas._objects[i].setCoords();
-    // }
-      // canvas.selection = true;
-      // canvas.forEachObject(function(o) {
-      //   o.selectable = true;
-      // });
-    // canvas.discardActiveObject();
-    // canvas.renderTop();
     canvas.zoomToPoint({ x: e.offsetX, y: e.offsetY }, zoomScale);
   });
 }

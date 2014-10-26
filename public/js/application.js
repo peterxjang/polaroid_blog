@@ -8,6 +8,7 @@ $(document).ready(function() {
   canvas.renderOnAddRemove = false;
   canvas.setWidth(window.innerWidth);
   canvas.setHeight(window.innerHeight);
+  zoomScale = 1;
   makeCanvasZoomable(canvas);
   window.addEventListener('resize', resizeCanvas, false);
   function resizeCanvas() {
@@ -15,42 +16,6 @@ $(document).ready(function() {
     canvas.setHeight(window.innerHeight);
     canvas.renderAll();
   }
-  //         canvasWrapper.width = window.innerWidth;
-  //         canvasWrapper.height = window.innerHeight;
-  //         drawStuff();
-  // }
-  // resizeCanvas();
-  // function drawStuff() {
-  //         do your drawing stuff here
-  //         canvas.renderAll();
-  // }
-
-
-  // create a wrapper around native canvas element (with id="canvas")
-  // canvas = new fabric.Canvas('canvas', {
-  //   // backgroundColor: '#333',
-  //   HOVER_CURSOR: 'pointer',
-  // });
-  // // canvas.setWidth(window.innerWidth*0.8);
-  // // canvas.setHeight(window.innerHeight*0.8);
-  // makeCanvasZoomable(canvas);
-  // $("#canvas").fabric = canvas;
-  // document.getElementById("canvas").fabric = canvas;
-
-  // var $canvas = document.getElementById('canvas'), context = canvas.getContext('2d');
-  // // resize the canvas to fill browser window dynamically
-  // window.addEventListener('resize', resizeCanvas, false);
-  // function resizeCanvas() {
-  //         $canvas.width = window.innerWidth;
-  //         $canvas.height = window.innerHeight;
-  //         /**
-  //          * Your drawings need to be inside this function otherwise they will be reset when
-  //          * you resize the browser window and the canvas goes will be cleared.
-  //          */
-  //         // drawStuff();
-  // }
-  // resizeCanvas();
-
 
   $("#edit-polaroids").on("click", function(event){
     event.preventDefault();
@@ -60,11 +25,8 @@ $(document).ready(function() {
       dataType: 'json',
       success: function(response) {
         $('#container').hide();
-        // $('#posts-container').html("");
         $('#div-top').append("<button id='save-layout'>Save layout</button>");
-        // $('#posts-container').append("<canvas id='canvas'></canvas>");
-        loadPostImages(canvas, response);
-
+        loadPostImagesEdit(canvas, response.canvasData, response.canvasZoom, response.objectsData);
       },
       error: function(response) {
         console.log(response);
@@ -73,18 +35,27 @@ $(document).ready(function() {
   });
 
   $('body').on('click', '#save-layout', function(e){
-    // canvas = $("#canvas").fabric;
+    var locationData = {}
     var objects = canvas.getObjects();
     for (var i=0; i<objects.length; i++) {
       object = objects[i];
-      console.log(object.post_id+":"+object.scaleX);
+      locationData[object.post_id] = {angle: object.angle,
+                                      top: object.top,
+                                      left: object.left,
+                                      scaleX: object.scaleX,
+                                      scaleY: object.scaleY}
+      // console.log(object.post_id+" save:"+object.scaleX+", "+object.scaleY);
     }
-
+    params = {objectsData: locationData,
+              canvasData: canvas.viewportTransform,
+              canvasZoom: canvas.getZoom()}
+    console.log(canvas.viewportTransform);
     $.ajax({
       url: '/posts_polaroid_state',
       type: "POST",
       dataType: 'json',
-      data: {state: canvas.toJSON()},
+      // data: {state: canvas.toJSON()},
+      data: params,
       success: function(response) {
         console.log(canvas.toJSON());
         window.location.href = '/posts';
@@ -103,20 +74,8 @@ $(document).ready(function() {
       dataType: 'json',
       success: function(response) {
         $('#container').hide();
-        console.log(canvas);
-        console.log(response.state);
-        // canvas.selection = false;
-        // var objects = canvas.getObjects();
-        // for (var i=0; i<objects.length; i++) {
-        //   object = objects[i];
-        //   // console.log(object.post_id+":"+object.scaleX);
-        //   // object.set('selectable', false);
-        //   object.evented = false;
-        // }
-        // canvas.deactivateAll();
-        canvas.removeListeners();
-        loadPostImages(canvas, response);
-        canvas.loadFromJSON(response.state);
+        loadPostImagesView(canvas, response.canvasData, response.canvasZoom, response.objectsData);
+        // canvas.loadFromJSON(response.state);
         canvas.renderAll();
       }
     });

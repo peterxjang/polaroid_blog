@@ -4,11 +4,17 @@ class CreateTables < ActiveRecord::Migration
       t.string :username
       t.string :password_hash
       t.text :canvas_state
+      t.float :canvas_zoom, default: 1.0
     end
     create_table :posts do |t|
       t.string :title
       t.text :body
       t.string :image
+      t.float :angle, default: 0.0
+      t.float :top, default: 150.0
+      t.float :left, default: 100.0
+      t.float :scaleX
+      t.float :scaleY
       t.belongs_to :user
     end
     create_table :tags do |t|

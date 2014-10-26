@@ -18,15 +18,24 @@ get '/posts_polaroid' do
   # erb :'posts/posts_polariod'
   # content_type :json
   # {points: post.points}.to_json
-
-
-  json_hash = {posts: [], state: @user.canvas_state.to_json}
+  transform = @user.canvas_state
+  if transform
+    transform.map! {|item| item.to_f}
+  end
+  json_hash = {objectsData: [],
+               canvasData: transform,
+               canvasZoom: @user.canvas_zoom}
   @posts.each do |post|
     puts post.image.url
-    json_hash[:posts] << {
+    json_hash[:objectsData] << {
       title: post.title,
       id: post.id,
-      url: post.image.url
+      url: post.image.url,
+      angle: post.angle,
+      top: post.top,
+      left: post.left,
+      scaleX: post.scaleX,
+      scaleY: post.scaleY
     }
   end
   content_type :json
@@ -35,17 +44,18 @@ end
 
 post '/posts_polaroid_state' do
   @user = User.find_by_id(session[:user_id])
-  @user.canvas_state = params[:state]
+  @user.canvas_state = params[:canvasData]
+  @user.canvas_zoom = params[:canvasZoom]
   @user.save!
-  puts params[:state]
+  params[:objectsData].each do |id, data|
+    post = @user.posts.find_by_id(id)
+    if @user
+      post.update_attributes!(data)
+    end
+  end
+  # puts params[:state]
   content_type :json
   {message: "Success!"}.to_json
-end
-
-get '/posts_polaroid_view' do
-  @user = User.find_by_id(session[:user_id])
-  content_type :json
-  {state: @user.canvas_state}.to_json
 end
 
 get '/posts/new' do
