@@ -38,7 +38,7 @@ function loadPostImagesEdit(canvas, canvasData, canvasZoom, objectsData) {
 }
 
 function loadPostImagesView(canvas, canvasData, canvasZoom, objectsData) {
-  canvas.removeListeners();
+  // canvas.removeListeners();
   loadPostImages(canvas, canvasData, canvasZoom, objectsData, true);
 }
 
@@ -57,9 +57,23 @@ function loadPostImages(canvas, canvasData, canvasZoom, objectsData, makeLinks) 
     for (var i=0; i< objectsData.length; i++){
       var post = objectsData[i];
       var group = polaroid(post.id, post.title, post.left+20*i, post.top+20*i, post.angle, function() {
-        canvas.bringToFront(canvas.getActiveObject());
+        if (!makeLinks) {
+          canvas.bringToFront(canvas.getActiveObject());
+        }
+        else {
+          postHtml = [
+            '<h2>' + this.post_title + '</h2>',
+            '<img class="img-fullwidth" src=' + this.post_url + '>',
+            '<p>' + this.post_body + '</p>'
+          ].join('')
+          $('#post-info').html(postHtml);
+          $('#post-info').show();
+        }
       });
       group.post_id = post.id;
+      group.post_url = post.url;
+      group.post_title = post.title;
+      group.post_body = post.body;
       // console.log(post.id+" load: "+post.scaleX+", "+post.scaleY)
       if (post.scaleX && post.scaleY) {
         group.setScaleX(post.scaleX);
@@ -68,9 +82,24 @@ function loadPostImages(canvas, canvasData, canvasZoom, objectsData, makeLinks) 
       else {
         group.scaleToHeight(300);
       }
+      if (makeLinks) {
+        group.hasControls = false;
+        group.lockMovementX = true;
+        group.lockMovementY = true;
+        group.lockScalingX = true;
+        group.lockScalingY = true;
+        group.lockRotation = true;
+        canvas.selection = false;
+        canvas.hoverCursor = 'pointer';
+      }
       canvas.add(group);
     }
     canvas.renderAll();
   })
   loader.start();
 }
+
+$('body').on('click', '#post-info', function(){
+  console.log($(this));
+  $(this).hide();
+})

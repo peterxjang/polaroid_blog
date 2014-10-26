@@ -54,5 +54,6 @@ function makeCanvasZoomable(canvas) {
     canvas._drawSelection = _drawSelection;
     isDown = false;
     canvas.zoomToPoint({ x: e.offsetX, y: e.offsetY }, zoomScale);
+    // $('#post-info').hide();
   });
 }

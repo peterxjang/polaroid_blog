@@ -46,7 +46,7 @@ body{
   z-index: 1
 }
 
-#container {
+#container, #post-info {
   background-color: rgba(255,255,255,0.4);
   box-shadow: 0 0 4px 4px rgb(255,255,255);
   box-shadow: 0 0 14px 14px rgba(255,255,255,0.4);
@@ -56,6 +56,12 @@ body{
   margin-right: auto;
   margin-top: 10%;
   /*padding: 10px*/
+}
+
+#post-info {
+  display: none;
+  margin-right: 0;
+  margin-top: 0;
 }
 
 .error-message {

@@ -31,6 +31,7 @@ get '/posts_polaroid' do
       title: post.title,
       id: post.id,
       url: post.image.url,
+      body: post.body,
       angle: post.angle,
       top: post.top,
       left: post.left,
@@ -80,6 +81,15 @@ get '/posts/:post_id' do
   @tags = @post.tags
   erb :'posts/show'
 end
+
+get '/posts_polaroid/:post_id' do
+  @user = User.find_by_id(session[:user_id])
+  @post = User.posts.find_by_id(params[:post_id])
+
+  content_type :json
+  {id: @post.id, title: @post.title}.to_json
+end
+
 
 post '/posts' do
   @user = User.find_by_id(session[:user_id])
