@@ -27,23 +27,29 @@ function makeCanvasZoomable(canvas) {
       _drawSelection = canvas._drawSelection,
       isDown = false;
 
-  canvas.on('mouse:down', function(options) {
+  $('body').mousedown(function(e) {
     isDown = true;
     viewportLeft = canvas.viewportTransform[4];
     viewportTop = canvas.viewportTransform[5];
-    mouseLeft = options.e.x;
-    mouseTop = options.e.y;
-    if (options.e.altKey) {
+    mouseLeft = e.pageX;
+    mouseTop = e.pageY;
+    // if (e.altKey) {
+    //   console.log(canvas.getActiveObject());
+    if (!canvas.getActiveObject()) {
       _drawSelection = canvas._drawSelection;
       canvas._drawSelection = function(){ };
+      // canvas.selection = false;
+      // canvas.forEachObject(function(o) {
+      //   o.selectable = false;
+      // });
     }
     // renderVieportBorders();
   });
 
-  canvas.on('mouse:move', function(options) {
-    if (options.e.altKey && isDown) {
-      var currentMouseLeft = options.e.x;
-      var currentMouseTop = options.e.y;
+  $('body').mousemove(function(e) {
+    if (!canvas.getActiveObject() && isDown) {
+      var currentMouseLeft = e.pageX;
+      var currentMouseTop = e.pageY;
       var deltaLeft = currentMouseLeft - mouseLeft,
           deltaTop = currentMouseTop - mouseTop;
       canvas.viewportTransform[4] = viewportLeft + deltaLeft;
@@ -54,8 +60,18 @@ function makeCanvasZoomable(canvas) {
     }
   });
 
-  canvas.on('mouse:up', function() {
+  $('body').mouseup(function(e) {
     canvas._drawSelection = _drawSelection;
     isDown = false;
+    // for (var i = 0, len = canvas._objects.length; i < len; i++) {
+    //   canvas._objects[i].setCoords();
+    // }
+      // canvas.selection = true;
+      // canvas.forEachObject(function(o) {
+      //   o.selectable = true;
+      // });
+    // canvas.discardActiveObject();
+    // canvas.renderTop();
+    canvas.zoomToPoint({ x: e.offsetX, y: e.offsetY }, zoomScale);
   });
 }

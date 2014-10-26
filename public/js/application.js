@@ -52,40 +52,18 @@ $(document).ready(function() {
   // resizeCanvas();
 
 
-  $("#link-polaroids").on("click", function(event){
+  $("#edit-polaroids").on("click", function(event){
     event.preventDefault();
     $.ajax({
-      url: '/posts_polariod',
+      url: '/posts_polaroid',
       type: "GET",
       dataType: 'json',
       success: function(response) {
-        $('#posts-container').html("");
-        $('#posts-container').append("<button id='save-layout'>Save layout</button>");
-        $('#posts-container').append("<canvas id='canvas'></canvas>");
-
-        var loader = new PxLoader();
-        for (var i=0; i< response.posts.length; i++){
-          var post = response.posts[i];
-          $('#posts-container').append('<img id="' + post.id + '" class="polaroid" src="' + post.url + '" />');
-          loader.addImage(post.url);
-        }
-        loader.addCompletionListener(function(){
-          for (var i=0; i< response.posts.length; i++){
-            var post = response.posts[i];
-            var group = polaroid(post.id, post.title, 150+20*i, 100+20*i, 0, function() {
-              canvas.bringToFront(canvas.getActiveObject());
-            });
-            group.post_id = post.id;
-            group.scaleToHeight(300);
-            canvas.add(group);
-          }
-          // if (response.state) {
-          if (false) {
-            canvas.loadFromJSON(response.state);
-          }
-          canvas.renderAll();
-        })
-        loader.start();
+        $('#container').hide();
+        // $('#posts-container').html("");
+        $('#div-top').append("<button id='save-layout'>Save layout</button>");
+        // $('#posts-container').append("<canvas id='canvas'></canvas>");
+        loadPostImages(canvas, response);
 
       },
       error: function(response) {
@@ -99,20 +77,50 @@ $(document).ready(function() {
     var objects = canvas.getObjects();
     for (var i=0; i<objects.length; i++) {
       object = objects[i];
-      console.log(object.post_id);
+      console.log(object.post_id+":"+object.scaleX);
     }
 
     $.ajax({
-      url: '/posts_polariod_state',
+      url: '/posts_polaroid_state',
       type: "POST",
       dataType: 'json',
       data: {state: canvas.toJSON()},
       success: function(response) {
+        console.log(canvas.toJSON());
         window.location.href = '/posts';
+        $('#posts-container').show();
       }
     })
 
-  })
+  });
+
+
+  $("#view-polaroids").on("click", function(event){
+    event.preventDefault();
+    $.ajax({
+      url: '/posts_polaroid',
+      type: "GET",
+      dataType: 'json',
+      success: function(response) {
+        $('#container').hide();
+        console.log(canvas);
+        console.log(response.state);
+        // canvas.selection = false;
+        // var objects = canvas.getObjects();
+        // for (var i=0; i<objects.length; i++) {
+        //   object = objects[i];
+        //   // console.log(object.post_id+":"+object.scaleX);
+        //   // object.set('selectable', false);
+        //   object.evented = false;
+        // }
+        // canvas.deactivateAll();
+        canvas.removeListeners();
+        loadPostImages(canvas, response);
+        canvas.loadFromJSON(response.state);
+        canvas.renderAll();
+      }
+    });
+  });
 
   // See: http://docs.jquery.com/Tutorials:Introducing_$(document).ready()
 });

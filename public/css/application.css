@@ -1,22 +1,30 @@
-/**{
-    padding: 0;
-    margin: 0;
-    border: 0;
-}
+/* CSS RESET */
+html, body, form, fieldset, legend { margin: 0; padding: 0; }
+h1, h2, h3, h4, h5, h6, p { margin: 0; padding: 0; }
+ul, ol, li { margin: 0; }
+fieldset,img { border: 0; }
+legend { color: #000; }
+sup { vertical-align: text-top; }
+sub { vertical-align: text-bottom; }
+table { border-collapse: collapse; border-spacing: 0;}
+caption, th, td { text-align: left; vertical-align: top; font-weight: normal; }
+input, textarea, select { font-size: 110%; line-height: 1.1; }
+abbr, acronym { border-bottom: .1em dotted; cursor: help; }
+
 
 body{
-    overflow: hidden;
+  padding: 0;
+  margin: 0;
+  border: 0;
 }
 
-#canvasWrapper {
-    background-color: red;
-    display: inline-block;
-}*/
-
-*{
-    padding: 0;
-    margin: 0;
-    border: 0;
+.list-no-bullets {
+  list-style-type: none;
+  padding: 0.4em;
+  line-height: 2em;
+}
+.img-fullwidth {
+  width: 100%;
 }
 
 #canvasWrapper{
@@ -33,17 +41,34 @@ body{
 }
 
 #div-top {
-  background-color: rgba(255,255,255,0.4);
-
   position: absolute;
-  top: 100;
-  left: 100;
+  width: 100%;
   z-index: 1
 }
 
+#container {
+  background-color: rgba(255,255,255,0.4);
+  box-shadow: 0 0 4px 4px rgb(255,255,255);
+  box-shadow: 0 0 14px 14px rgba(255,255,255,0.4);
+  position: relative;
+  width: 30%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10%;
+  padding: 10px
+}
 
 .error-message {
   color: red;
+}
+
+.signout {
+  display: block;
+  float: right;
+  /*width: 50%;*/
+  /*position: relative;
+  margin-left: auto;
+  margin-right: 0;*/
 }
 
 .polaroid{

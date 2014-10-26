@@ -35,7 +35,10 @@
       <canvas id="canvas"></canvas>
     </div>
     <div id='div-top'>
-      <%= yield %>
+      <div id='container'>
+        <%= show_signinout %>
+        <%= yield %>
+      </div>
     </div>
   </main>
 </body>

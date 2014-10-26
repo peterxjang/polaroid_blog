@@ -9,7 +9,7 @@ get '/posts' do
   erb :'posts/index'
 end
 
-get '/posts_polariod' do
+get '/posts_polaroid' do
   @user = User.find_by_id(session[:user_id])
   redirect '/' if !@user
   @posts = @user.posts
@@ -33,13 +33,19 @@ get '/posts_polariod' do
   json_hash.to_json
 end
 
-post '/posts_polariod_state' do
+post '/posts_polaroid_state' do
   @user = User.find_by_id(session[:user_id])
   @user.canvas_state = params[:state]
   @user.save!
   puts params[:state]
   content_type :json
   {message: "Success!"}.to_json
+end
+
+get '/posts_polaroid_view' do
+  @user = User.find_by_id(session[:user_id])
+  content_type :json
+  {state: @user.canvas_state}.to_json
 end
 
 get '/posts/new' do

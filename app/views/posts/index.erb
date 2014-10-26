@@ -1,14 +1,13 @@
 <div id="posts-container">
-<p>Welcome <%= @user.username %></p>
 <h1>Your posts</h1>
 <ul>
   <% @posts.each do |post| %>
     <li><a href="/posts/<%= post.id %>"><%= post.title %></a></li>
   <% end %>
 </ul>
-<ul>
+<ul class='list-no-bullets'>
   <li><a href='/posts/new'>Create new post</a></li>
-  <li><a id="link-polaroids" href='/'>View as polariods</a></li>
-  <!-- <li><a id="link-polaroids" href='/'>View </a></li> -->
+  <li><a id="edit-polaroids" href='/'>Edit polaroid canvas</a></li>
+  <li><a id="view-polaroids" href='/'>View polaroid canvas</a></li>
 </ul>
 </div>
