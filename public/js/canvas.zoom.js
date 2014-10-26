@@ -26,22 +26,28 @@ function makeCanvasZoomable(canvas) {
       _drawSelection = canvas._drawSelection,
       isDown = false;
 
-  $('body').mousedown(function(e) {
+  // $('body').mousedown(function(e) {
+  canvas.on('mouse:down', function(options) {
     isDown = true;
     viewportLeft = canvas.viewportTransform[4];
     viewportTop = canvas.viewportTransform[5];
-    mouseLeft = e.pageX;
-    mouseTop = e.pageY;
+    // mouseLeft = e.pageX;
+    // mouseTop = e.pageY;
+    mouseLeft = options.e.x;
+    mouseTop = options.e.y;
     if (!canvas.getActiveObject()) {
       _drawSelection = canvas._drawSelection;
       canvas._drawSelection = function(){ };
     }
   });
 
-  $('body').mousemove(function(e) {
+  // $('body').mousemove(function(e) {
+  canvas.on('mouse:move', function(options) {
     if (!canvas.getActiveObject() && isDown) {
-      var currentMouseLeft = e.pageX;
-      var currentMouseTop = e.pageY;
+      // var currentMouseLeft = e.pageX;
+      // var currentMouseTop = e.pageY;
+      var currentMouseLeft = options.e.x;
+      var currentMouseTop = options.e.y;
       var deltaLeft = currentMouseLeft - mouseLeft,
           deltaTop = currentMouseTop - mouseTop;
       canvas.viewportTransform[4] = viewportLeft + deltaLeft;
@@ -50,10 +56,12 @@ function makeCanvasZoomable(canvas) {
     }
   });
 
-  $('body').mouseup(function(e) {
+  // $('body').mouseup(function(e) {
+  canvas.on('mouse:up', function(options) {
     canvas._drawSelection = _drawSelection;
     isDown = false;
-    canvas.zoomToPoint({ x: e.offsetX, y: e.offsetY }, zoomScale);
+    // canvas.zoomToPoint({ x: e.offsetX, y: e.offsetY }, zoomScale);
+    canvas.zoomToPoint({ x: options.e.x, y: options.e.y }, zoomScale);
     // $('#post-info').hide();
   });
 }

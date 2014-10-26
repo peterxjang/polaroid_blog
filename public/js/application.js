@@ -10,6 +10,7 @@ $(document).ready(function() {
   canvas.setHeight(window.innerHeight);
   zoomScale = 1;
   makeCanvasZoomable(canvas);
+  canvas.on('selection:cleared', function() {$("#post-info").hide();})
   window.addEventListener('resize', resizeCanvas, false);
   function resizeCanvas() {
     canvas.setWidth(window.innerWidth);

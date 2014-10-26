@@ -1,5 +1,9 @@
 get '/' do
-  erb :'sessions/new'
+  if User.find_by_id(session[:user_id])
+    redirect '/posts'
+  else
+    erb :'sessions/new'
+  end
   # erb :'posts/posts_polariod'
 end
 
