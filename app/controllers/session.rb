@@ -19,7 +19,7 @@ post '/sessions' do
 end
 
 post '/users' do
-  user = User.new(username: params[:username], password: params[:password])
+  user = User.create(username: params[:username], password: params[:password])
   if user.valid?
     session[:user_id] = user.id
     redirect '/posts'
