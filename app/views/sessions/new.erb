@@ -1,10 +1,19 @@
 <h1>ZoomWorld PhotoBlog</h1>
-<h3>Sign in</h3>
+<h3>Sign in:</h3>
 <form action="/sessions" method="POST">
-  <p class='error-message'><%= @message %></p>
+  <p class='error-message'><%= @message_signin %></p>
   <ul class='list-no-bullets'>
     <li><input type="text" name="username" placeholder="Username"/></li>
     <li><input type="password" name="password" placeholder="Password"/></li>
     <li><input type="submit" value="Sign in"/></li>
+  </ul>
+</form>
+<h3>Or create an account:</h3>
+<form action="/users" method="POST">
+  <p class='error-message'><%= @message_signup %></p>
+  <ul class='list-no-bullets'>
+    <li><input type="text" name="username" placeholder="Username"/></li>
+    <li><input type="password" name="password" placeholder="Password"/></li>
+    <li><input type="submit" value="Sign up"/></li>
   </ul>
 </form>
